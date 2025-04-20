@@ -3,27 +3,45 @@
 ### Overview
 #### A python package of utilities to help Get Sh*t Done
 
-### Environment set-up
-Option 1: Using conda
-```bash
-conda env create -f environment.yml
-conda activate gsd_env
-conda deactive #when done
+### Installation
+inclue in ```requirements.txt``` as
 ```
+git+https://github.com/someuser/mypackage.git 
+#or
+git+https://github.com/someuser/mypackage.git@v0.1.0
+```
+then:
 
-Option 2: Using pip
 ```bash
-python -m venv gsd_env
-source gsd_env/bin/activate
-gsd_env\Scripts\activate #windows
-pip install -r requirements.txt
-deactivate #when done
-```
-
-### Dependencies (esp. when not using an isolated enviroment
-```
 pip install -r requirements.txt
 ```
+
+or ```pip install``` from github via:
+
+```bash
+pip install git+https://github.com/essans/gsd.git
+
+#or
+
+pip install git+https://github.com/essans/gsd.git@v0.1.0
+
+#or
+
+pip install git+https://github.com/essans/gsd.git@<commit-hash>
+```
+
+or ```git clone https://github.com/essans/gsd.git``` to local and install via:
+
+```bash
+git tag # to see available tagged versions
+git checkout v0.1.0 #for example
+
+pip install .
+#or
+pip install git+file://Users<user_name>/code_dir/gsd@v.0.1.0
+```
+
+<br>
 
 ## Usage
 ```py
@@ -272,4 +290,5 @@ timer.get_timestamp(format="YYYY-MM-DD_HHMMSS") #alternative provide valid pytho
 ### Notes:
 ```
 git tag -a v0.1.0 -m "Release version 0.1.0"
+git push origin v0.1.0
 ```
