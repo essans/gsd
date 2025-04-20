@@ -289,6 +289,6 @@ timer.get_timestamp(format="YYYY-MM-DD_HHMMSS") #alternative provide valid pytho
 
 ### Notes:
 ```
-git tag -a v0.1.0.post1 -m "update readme for 0.1.0"
-git push origin v0.1.0.post1
+git tag -a v0.1.0.post2 -m "cleanup for 0.1.0"
+git push origin v0.1.0.post2
 ```
