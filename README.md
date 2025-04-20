@@ -290,5 +290,5 @@ timer.get_timestamp(format="YYYY-MM-DD_HHMMSS") #alternative provide valid pytho
 ### Notes:
 ```
 git tag -a v0.1.0 -m "Release version 0.1.0"
-git push origin v0.1.0
+git push origin v0.1.0.post1
 ```
