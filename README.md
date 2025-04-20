@@ -267,3 +267,9 @@ timer.get_timestamp(format="YYYY-MM-DD_HHMMSS") #alternative provide valid pytho
 
 <br>
 
+
+
+### Notes:
+```
+git tag -a v0.1.0 -m "Release version 0.1.0"
+```
