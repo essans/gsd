@@ -131,10 +131,25 @@ eg for pulling out specific information from project and user configs based on a
 project=ProjectConfigs()
 configs = project.configs_from_yaml()
 
-s3_credentials_dict = project.yaml_to_dict(configs['credentials']['aws_credentials'])
+aws_credentials_dict = project.yaml_to_dict(configs['credentials']['aws_credentials'])
 ```
+<br>
+
+#### `load_credentials(credentials_json, aws_profile='default)`
+
+Used to extract and load credentials
+
+```py
+project=ProjectConfigs()
+configs = project.configs_from_yaml()
+
+credentials = project.load_credentials(configs['credentials'], aws_profile='default')
+
+
 ---
 <br>
+
+
 
 ## gsdIO
 

@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import yaml
+import configparser
 
 class ProjectConfigs:
     """
@@ -83,3 +84,31 @@ class ProjectConfigs:
                     for col,attrbutes in v.items():
                         f.write(f'  {col}: {attrbutes}\n')
                     f.write('\n')
+
+
+    def load_credentials(self, credentials_json, aws_profile="default"):
+        creds = credentials_json
+        result = {}
+
+        for key, path in creds.items():
+
+            if 'aws' in key:
+                parser = configparser.ConfigParser()
+                parser.read(path)
+                
+                if aws_profile not in parser:
+                    raise ValueError(f"Profile '{aws_profile}' not found in {path}")
+
+                result[key] = {
+                    'aws_access_key_id': parser[aws_profile].get('aws_access_key_id'),
+                    'aws_secret_access_key': parser[aws_profile].get('aws_secret_access_key')}
+                
+            else:
+
+                try:
+                    with open(path, 'r') as f:
+                        result[key] = f.read().strip()
+                except FileNotFoundError:
+                    raise FileNotFoundError(f"Credential file for {key} not found at: {path}")
+
+        return result
