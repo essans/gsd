@@ -86,29 +86,62 @@ class ProjectConfigs:
                     f.write('\n')
 
 
-    def load_credentials(self, credentials_json, aws_profile="default"):
+    # def load_credentials(self, credentials_config):
+    #     result = {}
+
+    #     for key, path in credentials_config.items():
+    #         parser = configparser.ConfigParser()
+
+    #         try:
+    #             parser.read(path)
+
+    #             if not parser.sections():
+    #                 raise ValueError(f"No sections found in credential file: {path}")
+
+    #             # Convert all sections to nested dict
+    #             section_data = {section: dict(parser[section]) for section in parser.sections()}
+    #             result[key] = section_data
+
+    #         except FileNotFoundError:
+    #             raise FileNotFoundError(f"Credential file for {key} not found at: {path}")
+    #         except Exception as e:
+    #             raise ValueError(f"Error parsing credentials for {key} from {path}: {e}")
+
+    #     return result
+
+
+    def load_credentials(self, credentials_json):
         creds = credentials_json
         result = {}
 
         for key, path in creds.items():
 
-            if 'aws' in key:
+            credential_files = [f for f in os.listdir(path) if f.startswith('credentials')]
+            
+            for file in credential_files:
                 parser = configparser.ConfigParser()
-                parser.read(path)
-                
-                if aws_profile not in parser:
-                    raise ValueError(f"Profile '{aws_profile}' not found in {path}")
-
-                result[key] = {
-                    'aws_access_key_id': parser[aws_profile].get('aws_access_key_id'),
-                    'aws_secret_access_key': parser[aws_profile].get('aws_secret_access_key')}
-                
-            else:
+                file_path = f'{path}/{file}'
 
                 try:
-                    with open(path, 'r') as f:
-                        result[key] = f.read().strip()
+                    parser.read(file_path)
+
+                    if not parser.sections():
+                         raise ValueError(f"No sections found in credential file: {file_path}")
+
+                    section_data = {section: dict(parser[section]) for section in parser.sections()}
+
+                    if key=='other':
+                        file_key = file.split('_')[1]
+
+                    else:
+                        file_key = key
+
+                    result[file_key] = section_data
+
                 except FileNotFoundError:
                     raise FileNotFoundError(f"Credential file for {key} not found at: {path}")
+                
+                except Exception as e:
+                    raise ValueError(f"Error parsing credentials for {key} from {path}: {e}")
 
         return result
