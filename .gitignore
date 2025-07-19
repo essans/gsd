@@ -43,7 +43,6 @@ src/__pycache__/*
 
 # Test outputs
 *.pytest_cache/
-docs/*.ipynb
 logs/
 temp/
 
