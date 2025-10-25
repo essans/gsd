@@ -95,6 +95,9 @@ root_dir = project.root_dir()
 configs = project.configs_from_yaml() #assuming file is in default location based on cookiecutter template
 
 project.print_global_configs() #shows defaults and shows dir content for any config label ending in '_dir'
+
+project.set_envs_from_creds(verbose=False`) #sets any env variables based on credentials info in project config yaml
+
 ```
 
 eg 

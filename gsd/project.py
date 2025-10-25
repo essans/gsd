@@ -86,29 +86,6 @@ class ProjectConfigs:
                     f.write('\n')
 
 
-    # def load_credentials(self, credentials_config):
-    #     result = {}
-
-    #     for key, path in credentials_config.items():
-    #         parser = configparser.ConfigParser()
-
-    #         try:
-    #             parser.read(path)
-
-    #             if not parser.sections():
-    #                 raise ValueError(f"No sections found in credential file: {path}")
-
-    #             # Convert all sections to nested dict
-    #             section_data = {section: dict(parser[section]) for section in parser.sections()}
-    #             result[key] = section_data
-
-    #         except FileNotFoundError:
-    #             raise FileNotFoundError(f"Credential file for {key} not found at: {path}")
-    #         except Exception as e:
-    #             raise ValueError(f"Error parsing credentials for {key} from {path}: {e}")
-
-    #     return result
-
 
     def load_credentials(self, credentials_json):
         creds = credentials_json
@@ -145,3 +122,25 @@ class ProjectConfigs:
                     raise ValueError(f"Error parsing credentials for {key} from {path}: {e}")
 
         return result
+    
+
+    def set_env_from_creds(self, verbose=True):
+        configs = self.configs_from_yaml()
+        credentials = self.load_credentials(configs['credentials'])
+
+        skipped = []
+
+        for k,v in credentials.items():
+            for k2,v2 in v.items():
+                
+                if k not in ['aws'] and k2=='default' and isinstance(v2.get('api_key'), str):
+                    os.environ[f'{k.upper()}_API_KEY'] = v2.get('api_key')
+                    if verbose:
+                        print(f'set environment variable for default: {k.upper()}_API_KEY')
+
+                else:
+                    skipped.append(f'{k}[{k2}]')
+                                   
+        if verbose:
+            print('skipping:')
+            print(skipped) #('\n'.join(skipped))  
