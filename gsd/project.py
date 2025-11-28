@@ -132,8 +132,26 @@ class ProjectConfigs:
 
         for k,v in credentials.items():
             for k2,v2 in v.items():
-                
-                if k not in ['aws'] and k2=='default' and isinstance(v2.get('api_key'), str):
+                service = k.lower()
+
+                if service == 'kaggle' and k2 == 'default':
+                    username = v2.get('username')
+                    key = v2.get('key')
+
+                    if isinstance(username, str):
+                        os.environ['KAGGLE_USERNAME'] = username
+                        if verbose:
+                            print('set environment variable for default: KAGGLE_USERNAME')
+
+                    if isinstance(key, str):
+                        os.environ['KAGGLE_KEY'] = key
+                        if verbose:
+                            print('set environment variable for default: KAGGLE_KEY')
+
+                    if not isinstance(username, str) and not isinstance(key, str):
+                        skipped.append(f'{k}[{k2}]')
+
+                elif service not in ['aws'] and k2=='default' and isinstance(v2.get('api_key'), str):
                     os.environ[f'{k.upper()}_API_KEY'] = v2.get('api_key')
                     if verbose:
                         print(f'set environment variable for default: {k.upper()}_API_KEY')
